@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title th:text="${station.id == null} ? '新增站點' : '編輯站點'">站點表單</title>
+    <style>
+        form {
+            width: 60%;
+            margin: 0 auto;
+        }
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+        input[type="text"] {
+            width: 250px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        select {
+            width: 100%;
+            max-width: 400px;
+        }
+        .center {
+            text-align: center;
+        }
+        button {
+            padding: 6px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        a {
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="center" th:text="${station.id == null} ? '新增站點' : '編輯站點'">站點表單</h1>
+
+<form th:action="@{/stations/save}" method="post" th:object="${station}">
+    <input type="hidden" th:field="*{id}" />
+
+    <div>
+        <label>站點名稱：</label>
+        <input type="text" th:field="*{name}" required />
+    </div>
+
+    <div>
+        <label>位置：</label>
+        <input type="text" th:field="*{location}" required />
+    </div>
+
+    <div>
+        <label style="vertical-align: top;">分配護士：</label><br/>
+        <select name="nurseIds" multiple size="5">
+            <option th:each="nurse : ${nurses}"
+                    th:value="${nurse.id}"
+                    th:text="${nurse.name} + '（' + ${nurse.employeeId} + '）'"
+                    th:selected="${station.nurses.contains(nurse)}">
+            </option>
+        </select>
+    </div>
+
+    <div class="center" style="margin-top: 15px;">
+        <button type="submit">儲存</button>
+    </div>
+</form>
+
+<div class="center">
+    <a th:href="@{/stations}">← 回站點列表</a>
+</div>
+
+</body>
+</html>

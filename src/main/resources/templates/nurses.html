@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>護士列表</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #999;
+            text-align: center;
+            vertical-align: top;
+        }
+        a.button {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        a.button.delete {
+            background-color: #f44336;
+        }
+        ul {
+            padding-left: 15px;
+            margin: 0;
+        }
+        li {
+            text-align: left;
+            list-style: disc;
+        }
+        form {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">護士列表</h1>
+
+<div style="text-align: center;">
+    <a href="/" class="button">回首頁</a>
+    <a href="/nurses/new" class="button">新增護士</a>
+</div>
+
+<table align="center">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+        <th>員工編號</th>
+        <th>年資</th>
+        <th>分配站點</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="nurse : ${nurses}">
+        <td th:text="${nurse.id}">1</td>
+        <td th:text="${nurse.name}">Amy</td>
+        <td th:text="${nurse.employeeId}">A001</td>
+        <td th:text="${nurse.experience}">3</td>
+        <td>
+            <ul>
+                <li th:each="station : ${nurse.stations}" th:text="${station.name}">A區站點</li>
+            </ul>
+        </td>
+        <td>
+            <a th:href="@{'/nurses/edit/' + ${nurse.id}}" class="button">修改</a>
+            <a th:href="@{'/nurses/delete/' + ${nurse.id}}" class="button delete"
+               onclick="return confirm('確定要刪除這位護士嗎？')">刪除</a>
+        </td>
+    </tr>
+</table>
+
+<hr style="width: 80%; margin-top: 40px;" />
+
+<h2 style="text-align: center;" th:text="${nurse.id != null} ? '修改護士' : '新增護士'">新增護士</h2>
+
+<form th:action="@{/nurses/save}" th:object="${nurse}" method="post" style="width: 60%; margin: 0 auto;">
+    <input type="hidden" th:field="*{id}" />
+
+    <div style="margin-bottom: 10px;">
+        <label>姓名:</label>
+        <input type="text" th:field="*{name}" required style="width: 150px;" />
+
+        <label style="margin-left: 20px;">員工編號:</label>
+        <input type="text" th:field="*{employeeId}" required style="width: 100px;" />
+
+        <label style="margin-left: 20px;">年資:</label>
+        <input type="number" th:field="*{experience}" min="0" required style="width: 60px;" />
+    </div>
+
+    <div style="margin-bottom: 10px;">
+        <label>分配站點:</label><br/>
+        <select name="stationIds" multiple required size="5" style="width: 100%; max-width: 400px;">
+            <option th:each="station : ${stations}"
+                    th:value="${station.id}"
+                    th:text="${station.name}"
+                    th:selected="${nurse.stations.contains(station)}">
+                站點
+            </option>
+        </select>
+    </div>
+
+    <div style="text-align: center; margin-top: 15px;">
+        <button type="submit" class="button"
+                th:text="${nurse.id != null} ? '更新' : '送出'">送出</button>
+    </div>
+</form>
+
+
+</body>
+</html>
