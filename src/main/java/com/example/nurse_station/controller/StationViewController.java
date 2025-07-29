@@ -25,7 +25,9 @@ public class StationViewController {
     // 顯示所有站點
     @GetMapping("/stations")
     public String listStations(Model model) {
-        model.addAttribute("stations", stationRepository.findAll());
+        List<Station> stations = stationRepository.findAll();
+        model.addAttribute("stations", stations);
+        model.addAttribute("stationCount", stations.size()); // 加入站點總數
         return "stations";
     }
 

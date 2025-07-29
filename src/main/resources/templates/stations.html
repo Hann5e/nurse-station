@@ -36,16 +36,25 @@
             list-style: disc;
         }
         h1 {
-        text-align: center;
-    }
-    .center {
-        text-align: center;
-    }
+            text-align: center;
+        }
+        .center {
+            text-align: center;
+        }
+        .summary {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
-<h1 style="text-align: center;">站點列表</h1>
+<h1>站點列表</h1>
+
+<div class="summary">
+    目前共有 <span th:text="${stationCount}">0</span> 個站點
+</div>
 
 <div style="text-align: center;">
     <a href="/stations/new" class="button">新增站點</a>
@@ -57,7 +66,8 @@
         <th>ID</th>
         <th>站點名稱</th>
         <th>位置</th>
-        <th>分配護士</th> <!-- 新增欄位 -->
+        <th>分配護士</th>
+        <th>護士數量</th>
         <th>操作</th>
     </tr>
     <tr th:each="station : ${stations}">
@@ -70,6 +80,7 @@
                     th:text="${nurse.name} + '（' + ${nurse.employeeId} + '）'">Amy（A001）</li>
             </ul>
         </td>
+        <td th:text="${#lists.size(station.nurses)} + ' 位護士'">0 位護士</td>
         <td>
             <a th:href="@{'/stations/edit/' + ${station.id}}" class="button">編輯</a>
             <a th:href="@{'/stations/delete/' + ${station.id}}" class="button delete">刪除</a>
