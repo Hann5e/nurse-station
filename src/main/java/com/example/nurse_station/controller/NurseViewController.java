@@ -25,10 +25,12 @@ public class NurseViewController {
     // 顯示護士列表和新增表單
     @GetMapping("/nurses")
     public String listNurses(Model model) {
+        List<Nurse> nurse = nurseRepository.findAll();
         model.addAttribute("nurses", nurseRepository.findAll());
         model.addAttribute("stations", stationRepository.findAll());
-        model.addAttribute("nurse", new Nurse()); // 空白表單用
-        return "nurses";
+        model.addAttribute("nurse", new Nurse());
+        model.addAttribute("nurseCount", nurse.size());
+           return "nurses";
     }
 
     // 按下「修改」後載入該護士資料
